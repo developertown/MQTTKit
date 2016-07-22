@@ -12,10 +12,6 @@
 
 
 static int logMask;
-void mosquittoLog(struct mosquitto *mosq, void *user_data, int logLevel, const char *msg){
-    printf("%s\n",msg);
-}
-
 
 #if 1 // set to 1 to enable logs
 
@@ -81,7 +77,9 @@ void mosquittoLog(struct mosquitto *mosq, void *user_data, int logLevel, const c
 
 @implementation MQTTClient
 
-
+static void on_log(struct mosquitto *mosq, void *user_data, int logLevel, const char *msg){
+    printf("%s\n",msg);
+}
 
 #pragma mark - mosquitto callback methods
 
@@ -205,7 +203,7 @@ static void on_unsubscribe(struct mosquitto *mosq, void *obj, int message_id)
         const char* cstrClientId = [self.clientID cStringUsingEncoding:NSUTF8StringEncoding];
 
         mosq = mosquitto_new(cstrClientId, self.cleanSession, (__bridge void *)(self));
-        mosquitto_log_callback_set(mosq, &mosquittoLog);
+        mosquitto_log_callback_set(mosq, on_log);
         mosquitto_connect_callback_set(mosq, on_connect);
         mosquitto_disconnect_callback_set(mosq, on_disconnect);
         mosquitto_publish_callback_set(mosq, on_publish);
