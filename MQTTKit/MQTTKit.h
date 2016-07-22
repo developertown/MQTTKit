@@ -113,4 +113,8 @@ completionHandler:(MQTTSubscriptionCompletionHandler)completionHandler;
 - (void)unsubscribe: (NSString *)topic
 withCompletionHandler:(void (^)(void))completionHandler;
 
+#pragma mark - Debug
+
+-(void)setLogVerbosityMask:(int)mask;
+
 @end

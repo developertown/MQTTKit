@@ -10,7 +10,14 @@
 #import "MQTTKit.h"
 #import "mosquitto.h"
 
-#if 0 // set to 1 to enable logs
+
+static int logMask;
+void mosquittoLog(struct mosquitto *mosq, void *user_data, int logLevel, const char *msg){
+    printf("%s\n",msg);
+}
+
+
+#if 1 // set to 1 to enable logs
 
 #define LogDebug(frmt, ...) NSLog(frmt, ##__VA_ARGS__);
 
@@ -198,6 +205,7 @@ static void on_unsubscribe(struct mosquitto *mosq, void *obj, int message_id)
         const char* cstrClientId = [self.clientID cStringUsingEncoding:NSUTF8StringEncoding];
 
         mosq = mosquitto_new(cstrClientId, self.cleanSession, (__bridge void *)(self));
+        mosquitto_log_callback_set(mosq, &mosquittoLog);
         mosquitto_connect_callback_set(mosq, on_connect);
         mosquitto_disconnect_callback_set(mosq, on_disconnect);
         mosquitto_publish_callback_set(mosq, on_publish);
@@ -362,4 +370,12 @@ static void on_unsubscribe(struct mosquitto *mosq, void *obj, int message_id)
     }
 }
 
+#pragma mark - Debug
+
+-(void)logVerbosity:(int)mask{
+    logMask = mask;
+}
+
 @end
+
+
