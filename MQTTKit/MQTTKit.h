@@ -70,6 +70,9 @@ typedef void (^MQTTDisconnectionHandler)(NSUInteger code);
                     cleanSession: (BOOL )cleanSession;
 - (void) setMessageRetry: (NSUInteger)seconds;
 
+#pragma TLS
+- (void) tlsSetWithCertificatePath:(NSString *)certificatePath certificateAuthorityPath:(NSString *)certificateAuthorityPath clientKey:(NSString *)clientKey;
+
 #pragma mark - Connection
 
 - (void) connectWithCompletionHandler:(void (^)(MQTTConnectionReturnCode code))completionHandler;

@@ -222,6 +222,14 @@ static void on_unsubscribe(struct mosquitto *mosq, void *obj, int message_id)
     }
 }
 
+#pragma mark - TLS
+- (void) tlsSetWithCertificatePath:(NSString *)certificatePath certificateAuthorityPath:(NSString *)certificateAuthorityPath clientKey:(NSString *)clientKey{
+    if(mosq){
+        mosquitto_tls_set(mosq, [certificateAuthorityPath cStringUsingEncoding:NSUTF8StringEncoding], NULL, [certificatePath cStringUsingEncoding:NSUTF8StringEncoding], [clientKey cStringUsingEncoding:NSUTF8StringEncoding], NULL);
+    }
+}
+
+
 #pragma mark - Connection
 
 - (void) connectWithCompletionHandler:(void (^)(MQTTConnectionReturnCode code))completionHandler {
